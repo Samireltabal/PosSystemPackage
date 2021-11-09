@@ -1,6 +1,6 @@
 <?php
 
-namespace Syncit\PosSystem;
+namespace Synciteg\PosSystem;
 
 use Illuminate\Support\Facades\Facade;
 

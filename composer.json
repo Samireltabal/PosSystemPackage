@@ -1,8 +1,8 @@
 {
-    "name": "syncit/pos-system",
+    "name": "synciteg/pos-system",
     "description": "Pos System created for syncit project",
     "require": {
-        "php": "^7.0"
+        "php": ">=7.4"
     },
     "license": "MIT",
     "authors": [
@@ -13,16 +13,16 @@
     ],
     "autoload": {
         "psr-4": {
-            "Syncit\\PosSystem\\": "src"
+            "Synciteg\\PosSystem\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Syncit\\PosSystem\\PosSystemServiceProvider"
+                "Synciteg\\PosSystem\\PosSystemServiceProvider"
             ],
             "aliases": {
-                "PosSystem": "Syncit\\PosSystem\\PosSystemFacade"
+                "PosSystem": "Synciteg\\PosSystem\\PosSystemFacade"
             }
         }
     },

@@ -1,5 +1,5 @@
 <?php 
-  namespace Syncit\PosSystem;
+  namespace Synciteg\PosSystem;
 
   use Syncit\PosSystem\Commands\PosSystemCommand;
   use Illuminate\Support\ServiceProvider;

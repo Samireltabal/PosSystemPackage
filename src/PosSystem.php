@@ -1,7 +1,7 @@
 <?php
   
-  namespace Syncit\PosSystem;
+  namespace Synciteg\PosSystem;
 
   class PosSystem {
-    
+
   }
