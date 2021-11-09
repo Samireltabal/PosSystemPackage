@@ -1,0 +1,34 @@
+{
+    "name": "syncit/pos-system",
+    "description": "Pos System created for syncit project",
+    "require": {
+        "php": "^7.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Samir M. Eltabal",
+            "email": "samir@synciteg.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Syncit\\PosSystem\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Syncit\\PosSystem\\PosSystemServiceProvider"
+            ],
+            "aliases": {
+                "PosSystem": "Syncit\\PosSystem\\PosSystemFacade"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
