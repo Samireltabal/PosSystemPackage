@@ -63,10 +63,10 @@ class ProductsController extends Controller
     // V.0.1.2 Pos Package 
     public function create_product(Request $request) {
         $validation = $request->validate([
-            'product_name' => 'required|unique:products,product_name',
+            'product_name' => 'required',
             'newCategory' => 'required',
             'product_type' => 'required|in:منتج,خدمة',
-            'category_id' => 'requiredIf:newCategory,false|exists:categories,id',
+            'category_id' => 'required_unless:newCategory,true',
             'category' => 'requiredIf:newCategory,true',
             'original_price' => 'required',
         ]);
