@@ -54,7 +54,7 @@ class Product extends Model
     }
 
     public function decrementStock($inventory_id) {
-        $inventory = $this->inventory()->where('inventory_type', '=', $inventory_id)->first();
+        $inventory = $this->inventory()->where('inventory_id', '=', $inventory_id)->first();
         if($inventory && $inventory->quantity > 0) {
             $inventory->decrement('quantity', 1);
             if($inventory->save()) {
@@ -73,7 +73,7 @@ class Product extends Model
     }
 
     public function incrementStock($inventory_id, $quantity) {
-        $inventory = $this->inventory()->where('inventory_type', '=', $inventory_id)->first();
+        $inventory = $this->inventory()->where('inventory_id', '=', $inventory_id)->first();
         $inventory->increment('quantity', $quantity);
         if($inventory->save()) {
             return true;
@@ -82,14 +82,14 @@ class Product extends Model
         }
     }
     public function moveStock($from, $to, $quantity) {
-        $inventory_from = $this->inventory()->where('inventory_type', '=', $from)->first();
+        $inventory_from = $this->inventory()->where('inventory_id', '=', $from)->first();
         if($inventory_from && $inventory_from->quantity < $quantity) {
             return false;
         }
         if($inventory_from) {
             $inventory_from->decrement('quantity', $quantity);
             if($inventory_from->save()) {
-                $inventory = $this->inventory()->where('inventory_type', '=', $to)->first();
+                $inventory = $this->inventory()->where('inventory_id', '=', $to)->first();
                 if($inventory) {
                     $inventory->increment('quantity', $quantity);
                     if($inventory->save()) {
@@ -99,7 +99,7 @@ class Product extends Model
                     }
                 } else {
                     $inventory = $inventory_from->replicate();
-                    $inventory->inventory_type = $to;
+                    $inventory->inventory_id = $to;
                     $inventory->created_at = \Carbon\Carbon::now();
                     $inventory->quantity = $quantity;
                     $inventory->save();
