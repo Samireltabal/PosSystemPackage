@@ -1,6 +1,6 @@
 <?php
-    namespace Syncit\PosSystem\Traits;
-    use Syncit\PosSystem\Models\InvoiceItem;
+    namespace Synciteg\PosSystem\Traits;
+    use Synciteg\PosSystem\Models\InvoiceItem;
     
     /**
      * 

@@ -4,7 +4,7 @@ namespace Synciteg\PosSystem\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Syncit\PosSystem\Traits\Invoiceable;
+use Synciteg\PosSystem\Traits\Invoiceable;
 use Syncit\StockControl\Traits\hasInventory;
 
 use App\Models\Purchase\PurchaseItem;
@@ -13,9 +13,10 @@ class Product extends Model
 {
     use HasFactory, Invoiceable, hasInventory;
 
-    protected $fillable = ['product_name', 'original_price', 'category_id', 'inventory_type_id', 'product_type_id', 'barcode', 'active', 'featured'];
-    protected $with = ['inventory', 'category'];
-
+    protected $fillable = ['product_name', 'original_price', 'category_id', 'product_type_id', 'barcode', 'active', 'featured'];
+    // protected $with = ['inventory', 'category'];
+    protected $appends = ['stock', 'BarcodeUrl'];
+    protected $hidden = ['inventory'];
     public function purchase() {
         return $this->morphMany(PurchaseItem::class, 'purchasable');
     }
