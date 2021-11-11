@@ -1,6 +1,6 @@
 <?php
 
-namespace Syncit\PosSystem\Models;
+namespace Synciteg\PosSystem\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

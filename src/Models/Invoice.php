@@ -1,10 +1,10 @@
 <?php
 
-namespace Syncit\PosSystem\Models;
+namespace Synciteg\PosSystem\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Syncit\PosSystem\Models\InvoiceItem;
+use Synciteg\PosSystem\Models\InvoiceItem;
 use App\Models\Erp\Customer;
 use App\Models\Main\Shift;
 

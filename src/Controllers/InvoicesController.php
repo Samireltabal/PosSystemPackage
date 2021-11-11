@@ -24,7 +24,7 @@ class InvoicesController extends Controller
 
     public function openInvoice(Request $request) {
         $validation = $request->validate([
-            'customer_id' => 'required|exists:profiles,id'
+            'customer_id' => 'required|exists:customers,id'
         ]);
         $current_shift = get_current_shift_id();
         $data = array(
@@ -97,6 +97,9 @@ class InvoicesController extends Controller
         $barcode = $request->input('barcode');
         // handle barcode & fetch item
         $data = explode("-", $barcode);
+        if (count($data) != 3 ) {
+            return response()->json(['message' => 'no records found'], 404);
+        }
         if($data[1] == env('MAINTAINENCE_CODE', "MNT")) {
             $sellable = Record::Barcode($barcode)->first();
         } elseif ($data[1] == env("PRODUCTS_CODE", "PRD")) {
