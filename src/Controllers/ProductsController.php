@@ -82,6 +82,10 @@ class ProductsController extends Controller
             );
             $product = Product::create($array_of_data);
             $product = self::generateBarcode($product);
+            if($request->has('tags')) {
+                $product->attachTags($request->input('tags'));
+            }
+            $product->save();
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([

@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Synciteg\PosSystem\Traits\Invoiceable;
 use Syncit\StockControl\Traits\hasInventory;
-
+use \Spatie\Tags\HasTags;
 use App\Models\Purchase\PurchaseItem;
 
 class Product extends Model
 {
-    use HasFactory, Invoiceable, hasInventory;
+    use HasFactory, Invoiceable, hasInventory, HasTags;
 
     protected $fillable = ['product_name', 'original_price', 'category_id', 'product_type_id', 'barcode', 'active', 'featured'];
-    // protected $with = ['inventory', 'category'];
+    protected $with = ['tags'];
     protected $appends = ['stock', 'BarcodeUrl'];
     protected $hidden = ['inventory'];
     public function purchase() {
