@@ -60,7 +60,7 @@ class ProductsController extends Controller
         // return if not excel file
         return response()->json(['message' => 'failed to import']);
     } 
-    // V.0.1.2 Pos Package 
+    // V.0.1.2 Pos Package // fix product category 
     public function create_product(Request $request) {
         $validation = $request->validate([
             'product_name' => 'required',
@@ -73,10 +73,14 @@ class ProductsController extends Controller
         DB::beginTransaction();
         try {
             $product_type = self::handle_product_type($request->input('product_type'));
-            $category = self::handle_category($request->input('category'));
+            if ($request->input('newCategory')) {
+                $category = self::handle_category($request->input('category'));
+            } else {
+                $category = $request->input('category_id');
+            }
             $array_of_data = array(
                 'product_name' => $request->input('product_name'),
-                'category_id' => $category->id,
+                'category_id' => $request->input('newCategory') ? $category->id : $category,
                 'product_type_id' => $product_type->id,
                 'original_price' => $request->input('original_price')
             );
