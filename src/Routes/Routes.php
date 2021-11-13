@@ -2,6 +2,7 @@
     use Synciteg\PosSystem\Controllers\ProductsController;
     use Synciteg\PosSystem\Controllers\CategoriesController;
     use Synciteg\PosSystem\Controllers\InvoicesController;
+    use Synciteg\PosSystem\Controllers\IptvController;
 
     Route::get('/', function() {
         return response()
@@ -15,6 +16,13 @@
         Route::put('/', [CategoriesController::class, 'update']);
         Route::get('/', [CategoriesController::class, 'list']);
         Route::delete('/', [CategoriesController::class, 'delete']);
+    });
+    Route::prefix('iptv')->group( function () {
+        Route::post('/server/create', [IptvController::class, 'create_server']);
+        Route::post('/codes/add', [IptvController::class, 'add_codes']);
+        Route::post('/codes/list', [IptvController::class, 'show_codes']);
+        Route::post('/request', [IptvController::class, 'generate']);
+        Route::post('/show', [IptvController::class, 'show']);
     });
     // Products Route 
     Route::prefix('products')->group( function () {
