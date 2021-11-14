@@ -126,7 +126,7 @@ class IptvController extends Controller
 
         $item = $subscription->invoicable()->create($data);
         $item->save();
-        $sellable->save();
-        return $item;
+        $subscription->save();
+        return $subscription;
     }
 }

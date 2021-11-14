@@ -21,7 +21,8 @@ class IptvSubscription extends Model
         'device_type_id'
     ];
 
-    protected $hidden = ['code'];
+    protected $appends = ['ServerName'];
+    protected $hidden = ['code','server'];
 
     public function customer() {
         return $this->belongsTo('App\Models\Erp\Customer', 'customer_id', 'id');
@@ -33,5 +34,9 @@ class IptvSubscription extends Model
 
     public function code() {
         return $this->hasOne('Synciteg\PosSystem\Models\IptvCode', 'id', 'code_id');
+    }
+
+    public function getServerNameAttribute() {
+        return $this->server->server_name;
     }
 }

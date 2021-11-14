@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Synciteg\PosSystem\Models\Invoice;
 use Synciteg\PosSystem\Models\Product;
+use Synciteg\PosSystem\Models\IptvSubscription;
 use App\Models\Main\Shift;
 use Syncit\MaintenanceCenter\Models\Record;
 
@@ -57,10 +58,12 @@ class InvoicesController extends Controller
             if ($item->invoicable instanceOf Product) {
                 $sub_total = $item->invoicable->original_price * $item->quantity;
                 $total_before_discount = $total_before_discount + $sub_total;
+            } elseif ($item->invoicable instanceOf Record) {
+                $total_before_discount = $total_before_discount + $item->total;
+            } else {
+                $total_before_discount = $total_before_discount + $item->total;
             }
-            if ($item->invoicable instanceOf Record) {
-                $total_before_discount = $total_before_discount + $item->selling_price;
-            }
+            
         }
         $data['meta'] = array(
             'totalBeforeDiscount' => $total_before_discount,
