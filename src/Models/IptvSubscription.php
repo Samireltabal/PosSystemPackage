@@ -4,10 +4,11 @@ namespace Synciteg\PosSystem\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Synciteg\PosSystem\Traits\Invoiceable;
 
 class IptvSubscription extends Model
 {
-    use HasFactory;
+    use HasFactory, Invoiceable;
 
     protected $fillable = [
         'customer_id', 

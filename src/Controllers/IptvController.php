@@ -101,10 +101,32 @@ class IptvController extends Controller
         ]);
 
         $subscription = IptvSubscription::with(['customer','server', 'code'])->find($request->input('code_id'));
+        
+        $subscription = self::addToPayments($subscription);
         $subscription->server->makeHidden(['id','supplier_id','purchase_price','created_at','updated_at', 'codesCount', 'supplier', 'availableCodes']);
         $subscription->customer->makeHidden(['id','uuid','is_employee', 'created_at','updated_at','gender','phone']);
         $subscription->customer->makeHidden(['id','created_at','updated_at', 'customer_id', 'record_id']);
         $subscription->makeVisible(['code']);
+        
         return response()->json($subscription, 200);
+    }
+
+    public static function addToPayments(IptvSubscription $subscription) {
+        $shift_id = get_current_shift_id();
+        $data = array(
+            'quantity' => 1,
+            'selling_price' => $subscription->price,
+            'total' => $subscription->price,
+            'discount' => 0,
+            'invoice_id' => null,
+            'shift_id' => $shift_id,
+            'fixed_discount' => true,
+            'accepted' => Auth()->guard('api')->user()->hasRole('admin') ? true : false,
+        );
+
+        $item = $subscription->invoicable()->create($data);
+        $item->save();
+        $sellable->save();
+        return $item;
     }
 }
