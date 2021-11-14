@@ -9,7 +9,18 @@ class IptvSubscription extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['customer_id', 'code_id', 'server_id', 'start_date', 'end_date', 'paid', 'price', 'device_type_id'];
+    protected $fillable = [
+        'customer_id', 
+        'code_id', 
+        'server_id', 
+        'start_date', 
+        'end_date',
+        'paid', 
+        'price', 
+        'device_type_id'
+    ];
+
+    protected $hidden = ['code'];
 
     public function customer() {
         return $this->belongsTo('App\Models\Erp\Customer', 'customer_id', 'id');
@@ -20,6 +31,6 @@ class IptvSubscription extends Model
     }
 
     public function code() {
-        return $this->hasOne('Synciteg/PosSystem/Models/IptvCode', 'code_id', 'id');
+        return $this->hasOne('Synciteg\PosSystem\Models\IptvCode', 'id', 'code_id');
     }
 }

@@ -9,7 +9,7 @@ class IptvServer extends Model
 {
     use HasFactory;
     protected $fillable = ['server_name', 'supplier_id', 'purchase_price'];
-
+    protected $with = ['supplier'];
     protected $appends = ['CodesCount'];
 
     
@@ -18,11 +18,11 @@ class IptvServer extends Model
     }
 
     public function availableCodes () {
-        return $this->hasMany('Synciteg\PosSystem\IptvCode', 'server_id', 'id')->where('used', '=', false);
+        return $this->hasMany('Synciteg\PosSystem\Models\IptvCode', 'server_id', 'id')->where('used', '=', false);
     }
 
     public function Codes () {
-        return $this->hasMany('Synciteg\PosSystem\IptvCode', 'server_id', 'id');
+        return $this->hasMany('Synciteg\PosSystem\Models\IptvCode', 'server_id', 'id');
     }
 
     public function getCodesCountAttribute() {

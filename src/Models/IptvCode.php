@@ -29,13 +29,24 @@ class IptvCode extends Model
     }
 
     public function record() {
-        return $this->hasOne('Synciteg/PosSystem/Models/IptvSubscription', 'record_id', 'id');
+        return $this->hasOne('Synciteg\PosSystem\Models\IptvSubscription', 'code_id', 'id');
     }
 
+    public function scopeGetFirstAvailableCode($query, $server_id) {
+        return $query->where('server_id', '=', $server_id)->where('used', '=', false)->first();
+    }
     public function getActiveAttribute() {
         if ($this->end_date < \Carbon\Carbon::now() ) {
             return false;
         }
+    }
+
+    public function markAsUsed($period) {
+        $this->used = true;
+        $this->start_date = \Carbon\Carbon::now();
+        $this->end_date = \Carbon\Carbon::now()->addMonths($this->periodByMonth);
+        $this->save();
+        return true;
     }
 
 }

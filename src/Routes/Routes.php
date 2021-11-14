@@ -19,6 +19,7 @@
     });
     Route::prefix('iptv')->group( function () {
         Route::post('/server/create', [IptvController::class, 'create_server']);
+        Route::get('/server/list', [IptvController::class, 'list_servers']);
         Route::post('/codes/add', [IptvController::class, 'add_codes']);
         Route::post('/codes/list', [IptvController::class, 'show_codes']);
         Route::post('/request', [IptvController::class, 'generate']);

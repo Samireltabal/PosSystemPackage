@@ -17,7 +17,7 @@ class CreateIptvCodesTable extends Migration
             $table->id();
             $table->bigInteger('server_id');
             $table->bigInteger('customer_id')->nullable();
-            $table->bigInteger('record_id');
+            $table->bigInteger('record_id')->nullable();
             $table->double('periodByMonth')->default(12);
             $table->char('code', 20)->unique();
             $table->date('start_date')->nullable();

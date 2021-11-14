@@ -1,6 +1,6 @@
 <?php 
     return [
-        'version'    => '0.1.2-Alpha',
+        'version'    => '0.2.0-Alpha',
         'prefix'     => env('SYNCIT_POS_ROUTES_PREFIX', 'api/pos'),
         'middleware' => 'api',
         'adminstrator_role' => env('SYNCIT_ADMIN_ROLE', 'admin'),
