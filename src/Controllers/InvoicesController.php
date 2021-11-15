@@ -108,22 +108,31 @@ class InvoicesController extends Controller
         } elseif ($data[1] == env("PRODUCTS_CODE", "PRD")) {
             $sellable = Product::Barcode($barcode)->first();
         }
-        $shift_id = get_current_shift_id();
-        $price_after_discount = self::calculate_discount($request->input('selling_price'), $request->input('discount'), $request->input('discount_fixed'));
-        $data = array(
-            'quantity' => $request->input('quantity'),
-            'selling_price' => $price_after_discount,
-            'total' => $price_after_discount * $request->input('quantity'),
-            'discount' => $request->input('discount'),
-            'invoice_id' => $request->has('invoice_id') && $request->input('invoice_id') ? $request->input('invoice_id') : null,
-            'shift_id' => $shift_id,
-            'fixed_discount' => $request->input('discount_fixed'),
-            'accepted' => Auth()->guard('api')->user()->hasRole('admin') ? true : false,
-        );
+        \DB::beginTransaction();
+        try {
+            $shift_id = get_current_shift_id();
+            $price_after_discount = self::calculate_discount($request->input('selling_price'), $request->input('discount'), $request->input('discount_fixed'));
+            $data = array(
+                'quantity' => $request->input('quantity'),
+                'selling_price' => $price_after_discount,
+                'total' => $price_after_discount * $request->input('quantity'),
+                'discount' => $request->input('discount'),
+                'invoice_id' => $request->has('invoice_id') && $request->input('invoice_id') ? $request->input('invoice_id') : null,
+                'shift_id' => $shift_id,
+                'fixed_discount' => $request->input('discount_fixed'),
+                'accepted' => Auth()->guard('api')->user()->hasRole('admin') ? true : false,
+            );
 
-        $item = $sellable->invoicable()->create($data);
-        $item->save();
-        $sellable->save();
+            $item = $sellable->invoicable()->create($data);
+            if ($item instanceOf Product) {
+                $item->decrementStock(setting('default_inventory'), $request->input('quantity'));
+            }
+            $item->save();
+            $sellable->save();
+        } catch (\Throwable $th) {
+            \DB::rollback();
+        }
+        \DB::commit();
         return $item;
     }
 

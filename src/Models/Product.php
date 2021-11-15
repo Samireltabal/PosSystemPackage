@@ -53,10 +53,10 @@ class Product extends Model
         })->doesntHave('inventory', 'or');
     }
 
-    public function decrementStock($inventory_id) {
+    public function decrementStock($inventory_id, $quantity) {
         $inventory = $this->inventory()->where('inventory_id', '=', $inventory_id)->first();
         if($inventory && $inventory->quantity > 0) {
-            $inventory->decrement('quantity', 1);
+            $inventory->decrement('quantity', $quantity);
             if($inventory->save()) {
                 return true;
             } else {
