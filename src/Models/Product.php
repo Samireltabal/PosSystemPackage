@@ -15,7 +15,7 @@ class Product extends Model
 
     protected $fillable = ['product_name', 'original_price', 'category_id', 'product_type_id', 'barcode', 'active', 'featured'];
     protected $with = ['tags'];
-    protected $appends = ['stock', 'BarcodeUrl'];
+    protected $appends = ['stock', 'BarcodeUrl', 'type'];
     protected $hidden = ['inventory'];
     public function purchase() {
         return $this->morphMany(PurchaseItem::class, 'purchasable');
@@ -35,6 +35,10 @@ class Product extends Model
         } else {
             return 0;
         }
+    }
+    
+    public function getTypeAttribute() {
+        return 'product';
     }
     
     public function scopeBarcode($query, $barcode) {
