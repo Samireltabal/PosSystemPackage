@@ -41,8 +41,14 @@ class IptvCode extends Model
         }
     }
 
-    public function markAsUsed($period) {
+    public function scopeCode($query, $code) {
+        return $query->where('code', '=', $code)->where('used', '=', true);
+    }
+
+    public function markAsUsed($customer, $record) {
         $this->used = true;
+        $this->customer_id = $customer;
+        $this->record_id = $record;
         $this->start_date = \Carbon\Carbon::now();
         $this->end_date = \Carbon\Carbon::now()->addMonths($this->periodByMonth);
         $this->save();

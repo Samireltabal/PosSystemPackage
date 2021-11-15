@@ -13,7 +13,7 @@ class IptvController extends Controller
     public function __construct() {
         $admin_middlewares = config('pos.adminstrator_role');
         $general_middlewares = config('pos.employee_role');
-        $this->middleware(["role:$admin_middlewares"])->except(['generate', 'show']);
+        $this->middleware(["role:$admin_middlewares"])->except(['generate', 'show', 'query']);
         $this->middleware(["role:$general_middlewares"])->only(['generate', 'show']);
     }
 
@@ -86,7 +86,7 @@ class IptvController extends Controller
                 'price' => $request->input('price'),
                 'device_type_id' => $request->input('device_type_id')
             ]);
-            $code->markAsUsed($code);
+            $code->markAsUsed($request->input('customer_id'), $record->id);
             \DB::commit();
             return $record;
         } catch (\Throwable $th) {
@@ -128,5 +128,36 @@ class IptvController extends Controller
         $item->save();
         $subscription->save();
         return $subscription;
+    }
+
+    public function query(Request $request) {
+        $validation = $request->validate([
+            'code' => 'required'
+        ]);
+        try {
+            $code = IptvCode::with(['record', 'record.customer'])->code($request->input('code'))->firstOrFail();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'code not found'
+            ], 404);
+        }
+        $response = array(
+            'نوع السيرفر' => $code->record->ServerName,
+            'الكود' => $code->code,
+            'تاريخ البداية' => $code->record->start_date,
+            'تاريخ النهاية' => $code->record->end_date,
+            'إسم العميل' => $code->record->customer->name,
+            'رقم العميل' => $code->record->customer->phone
+        );
+        return response()->json($response, 200);
+    }
+
+    public function show_server(Request $request) {
+        $validation = $request->validate([
+            'server_id' => 'required|exists:iptv_servers,id'
+        ]);
+        
+        $server = IptvServer::with(['UsedCodes','availableCodes'])->find($request->input('server_id'));
+        return response()->json($server, 200);
     }
 }

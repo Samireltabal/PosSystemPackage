@@ -124,13 +124,14 @@ class InvoicesController extends Controller
             );
 
             $item = $sellable->invoicable()->create($data);
-            if ($item instanceOf Product) {
-                $item->decrementStock(setting('default_inventory'), $request->input('quantity'));
+            if ($sellable instanceOf Product) {
+                $sellable->decrementStock(setting('default_inventory'), $request->input('quantity'));
             }
             $item->save();
             $sellable->save();
         } catch (\Throwable $th) {
             \DB::rollback();
+            return response()->json(['message' => 'something went wrong'], 400);
         }
         \DB::commit();
         return $item;

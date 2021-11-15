@@ -24,6 +24,8 @@
         Route::post('/codes/list', [IptvController::class, 'show_codes']);
         Route::post('/request', [IptvController::class, 'generate']);
         Route::post('/show', [IptvController::class, 'show']);
+        Route::post('/query', [IptvController::class, 'query']);
+        Route::get('/server', [IptvController::class, 'show_server']);
     });
     // Products Route 
     Route::prefix('products')->group( function () {
