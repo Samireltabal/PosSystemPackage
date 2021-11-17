@@ -13,8 +13,8 @@ class IptvController extends Controller
     public function __construct() {
         $admin_middlewares = config('pos.adminstrator_role');
         $general_middlewares = config('pos.employee_role');
-        $this->middleware(["role:$admin_middlewares"])->except(['generate', 'show', 'query']);
-        $this->middleware(["role:$general_middlewares"])->only(['generate', 'show']);
+        $this->middleware(["role:$admin_middlewares"])->except(['generate', 'show', 'query', 'list_servers']);
+        $this->middleware(["role:$general_middlewares"])->only(['generate', 'show', 'list_servers']);
     }
 
     public function create_server(Request $request) {
@@ -157,7 +157,8 @@ class IptvController extends Controller
             'server_id' => 'required|exists:iptv_servers,id'
         ]);
         
-        $server = IptvServer::with(['UsedCodes','availableCodes'])->find($request->input('server_id'));
+        $server = IptvServer::with(['UsedCodes','availableCodes', 'UsedCodes.customer'])->find($request->input('server_id'));
+        $server->makeVisible(['UsedCodes', 'availableCodes', 'UsedCodes.customer']);
         return response()->json($server, 200);
     }
 }
