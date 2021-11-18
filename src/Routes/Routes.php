@@ -2,6 +2,7 @@
     use Synciteg\PosSystem\Controllers\ProductsController;
     use Synciteg\PosSystem\Controllers\CategoriesController;
     use Synciteg\PosSystem\Controllers\InvoicesController;
+    use Synciteg\PosSystem\Controllers\BundleController;
     use Synciteg\PosSystem\Controllers\IptvController;
 
     Route::get('/', function() {
@@ -37,6 +38,15 @@
         Route::delete('/', [ProductsController::class, 'delete_product']);
     });
 
+    Route::prefix('bundles')->group( function () {
+        Route::get('/', [BundleController::class, 'list']);
+        Route::post('/', [BundleController::class, 'create']);
+        Route::get('/disable/{id}', [BundleController::class, 'disable']);
+        Route::get('/enable/{id}', [BundleController::class, 'enable']);
+        Route::get('/delete/{id}', [BundleController::class, 'delete']);
+        Route::get('/edit/{id}', [BundleController::class, 'edit']);
+        Route::get('/show/{id}', [BundleController::class, 'show']);
+    });
     Route::prefix('sales')->group( function () {
         Route::get('/invoices', [InvoicesController::class, 'list_open_invoices']);
         Route::post('/invoices', [InvoicesController::class, 'openInvoice']);
