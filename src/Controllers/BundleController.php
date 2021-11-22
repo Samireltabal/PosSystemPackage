@@ -43,13 +43,16 @@ class BundleController extends Controller
         $bundle = Bundle::create([
             'name' => $request->input('name'),
             'price' => $request->input('price'),
-            'expires_at' => $request->input('expires_at')
+            'expires_at' => $request->input('expires_at'),
+            'products' => $request->input('products'),
+            'active' => true
         ]);
         $bundle->save();
+        $bundle = self::generateBarcode($bundle);
         $bundle_id = $bundle->id;
         $ps = collect($request->input('products'));
         foreach ($ps as $p) {
-            $product = Product::find($p->id);
+            $product = Product::find($p['id']);
             $product->groupable()->create([
                 'bundle_id' => $bundle_id
             ]);
@@ -58,11 +61,15 @@ class BundleController extends Controller
     }
 
     public function disable($id) {
-
+        $bundle = Bundle::find($id);
+        $bundle->disable();
+        return $bundle;
     }
 
     public function enable($id) {
-
+        $bundle = Bundle::find($id);
+        $bundle->enable();
+        return $bundle;
     }
 
     public function edit (Request $request, $id) {
@@ -70,10 +77,20 @@ class BundleController extends Controller
     }
 
     public function delete ($id) {
-
+        $bundle = Bundle::find($id);
+        $bundle->delete();
+        return response()->json(['message' => 'deleted'], 200);
     }
 
     public function show ($id) {
+        $bundle = Bundle::find($id);
+        return response()->json($bundle, 200);
+    }
 
+    public static function generateBarcode(Bundle $record) {
+        $barcode = env('ORGANIZATION_CODE', "SYN") . '-' . env('PRODUCTS_CODE', "BUN") . '-' ."300" . $record->id;
+        $record->barcode = $barcode;
+        $record->save();
+        return $record;
     }
 }

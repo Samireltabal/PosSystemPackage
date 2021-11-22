@@ -15,7 +15,7 @@ class CreateBundleItemsTable extends Migration
     {
         Schema::create('bundle_items', function (Blueprint $table) {
             $table->id();
-            $table->morphs('groupable')->nullable();
+            $table->morphs('groupable');
             $table->integer('bundle_id');
             $table->timestamps();
         });

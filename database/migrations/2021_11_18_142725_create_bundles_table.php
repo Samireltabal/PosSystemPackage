@@ -18,6 +18,7 @@ class CreateBundlesTable extends Migration
             $table->string('name');
             $table->double('price', 10, 2);
             $table->json('products');
+            $table->string('barcode')->nullable();
             $table->date('expires_at');
             $table->boolean('active');
             $table->timestamps();

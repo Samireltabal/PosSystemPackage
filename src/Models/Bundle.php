@@ -19,10 +19,13 @@ class Bundle extends Model
     ];
 
     protected $with = [
-        'items'
     ];
+
+    protected $hidden = ['items', 'products'];
+    protected $appends = ['InProducts'];
+
     protected $casts = [
-        'products' => 'Array'
+        'products' => 'array'
     ];
 
     public function items() {
@@ -33,6 +36,15 @@ class Bundle extends Model
         return $query->where('active', '=', true)->where('expires_at', '>=',  \Carbon\Carbon::now());
     }
 
+    public function getInProductsAttribute () {
+        $products = array();
+        if($this->has('items') && $this->items->count() > 0) {
+            foreach ($this->items as $item) {
+                $products[] = $item->groupable;
+            }
+        } 
+        return $products;
+    }
     public function disable() {
         $this->active = false;
         $this->save();
