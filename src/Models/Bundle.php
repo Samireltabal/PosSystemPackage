@@ -5,10 +5,11 @@ namespace Synciteg\PosSystem\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Synciteg\PosSystem\Models\BundleItem;
+use Synciteg\PosSystem\Traits\Invoiceable;
 
 class Bundle extends Model
 {
-    use HasFactory;
+    use HasFactory, Invoiceable;
 
     protected $fillable = [
         'name',
@@ -22,7 +23,7 @@ class Bundle extends Model
     ];
 
     protected $hidden = ['items', 'products'];
-    protected $appends = ['InProducts'];
+    protected $appends = [ 'BarcodeUrl', 'InProducts'];
 
     protected $casts = [
         'products' => 'array'
@@ -54,4 +55,14 @@ class Bundle extends Model
         $this->active = true;
         $this->save();
     }
+
+    public function scopeBarcode($query, $barcode) {
+        return $query->where('barcode', $barcode);
+    }
+
+    public function getBarcodeUrlAttribute() {
+        $uri = \DNS1D::getBarcodePNGPath($this->attributes['barcode'], 'C128',1,64,array(0,0,0), true);
+        return url($uri);
+    }
+    
 }

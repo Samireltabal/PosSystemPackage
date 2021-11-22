@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Synciteg\PosSystem\Models\Invoice;
 use Synciteg\PosSystem\Models\Product;
+use Synciteg\PosSystem\Models\Bundle;
 use Synciteg\PosSystem\Models\IptvSubscription;
 use App\Models\Main\Shift;
 use Syncit\MaintenanceCenter\Models\Record;
@@ -84,6 +85,8 @@ class InvoicesController extends Controller
             $response = Record::Barcode($barcode)->first();
         } elseif ($data[1] == env("PRODUCTS_CODE", "PRD")) {
             $response = Product::Barcode($barcode)->first();
+        } elseif ($data[1] == env("BUNDLE_CODE", "BUN")) {
+            $response = Bundle::Barcode($barcode)->first();
         }
         return response()->json($response);
 
@@ -107,6 +110,8 @@ class InvoicesController extends Controller
             $sellable = Record::Barcode($barcode)->first();
         } elseif ($data[1] == env("PRODUCTS_CODE", "PRD")) {
             $sellable = Product::Barcode($barcode)->first();
+        } elseif ($data[1] == env("BUNDLE_CODE", "BUN")) {
+            $sellable = Bundle::Barcode($barcode)->first();
         }
         \DB::beginTransaction();
         try {

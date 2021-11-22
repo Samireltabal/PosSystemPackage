@@ -88,7 +88,7 @@ class BundleController extends Controller
     }
 
     public static function generateBarcode(Bundle $record) {
-        $barcode = env('ORGANIZATION_CODE', "SYN") . '-' . env('PRODUCTS_CODE', "BUN") . '-' ."300" . $record->id;
+        $barcode = env('ORGANIZATION_CODE', "SYN") . '-' . env('BUNDLE_CODE', "BUN") . '-' ."300" . $record->id;
         $record->barcode = $barcode;
         $record->save();
         return $record;
